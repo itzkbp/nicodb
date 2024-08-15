@@ -41,6 +41,23 @@ func (l *_Lexer) readIdentifier() string {
 	return l.query[start : l.position-1]
 }
 
+func (l *_Lexer) readLiteral() string {
+	start := l.position - 1
+	if l.cur_Char == '\'' || l.cur_Char == '"' || l.cur_Char == '`' {
+		l.readChar()
+		for !(l.cur_Char == '\'' || l.cur_Char == '"' || l.cur_Char == '`') {
+			l.readChar()
+		}
+		l.readChar()
+	} else {
+		for unicode.IsDigit(l.cur_Char) || l.cur_Char == '.' {
+			l.readChar()
+		}
+	}
+
+	return l.query[start : l.position-1]
+}
+
 func (l *_Lexer) nextToken() _Token {
 	l.skipWhitespaces()
 
@@ -59,6 +76,14 @@ func (l *_Lexer) nextToken() _Token {
 		tok = newToken(TK_RPAREN, ")")
 	case ',':
 		tok = newToken(TK_COMMA, ",")
+	case '.':
+		tok = newToken(TK_DOT, ".")
+	case '\'':
+		tok = newToken(TK_SIN_INV, "'")
+	case '"':
+		tok = newToken(TK_DOU_INV, "\"")
+	case '`':
+		tok = newToken(TK_BK_TICK, "`")
 
 	default:
 		if unicode.IsLetter(l.cur_Char) || l.cur_Char == '_' {
@@ -75,9 +100,32 @@ func (l *_Lexer) nextToken() _Token {
 				tok = newToken(TK_KW_FROM, ident)
 			case "WHERE":
 				tok = newToken(TK_KW_WHERE, ident)
+
+			case "NUMBER":
+				tok = newToken(TK_DT_NUMBER, ident)
+			case "TEXT":
+				tok = newToken(TK_DT_TEXT, ident)
+			case "FLOAT":
+				tok = newToken(TK_DT_FLOAT, ident)
+			case "BOOL":
+				tok = newToken(TK_DT_BOOL, ident)
+
+			case "PRIMARY":
+				tok = newToken(TK_PRIMARY, ident)
+			case "KEY":
+				tok = newToken(TK_KEY, ident)
+			case "NOT":
+				tok = newToken(TK_NOT, ident)
+			case "NULL":
+				tok = newToken(TK_NULL, ident)
+
 			default:
 				tok = newToken(TK_IDENTIFIER, ident)
-			}
+			} // switch identifier
+		} else if unicode.IsDigit(l.cur_Char) || l.cur_Char == '\'' || l.cur_Char == '"' || l.cur_Char == '`' {
+			tok = newToken(TK_VAL_LITERAL, l.readLiteral())
+		} else {
+			tok = newToken(TK_INVALID, string(l.cur_Char))
 		}
 	}
 
