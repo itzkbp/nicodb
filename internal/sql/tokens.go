@@ -1,52 +1,52 @@
 package sqlparser
 
-type _TokenKind string
+type _TokenKind uint8
 
 const (
-	TK_INVALID _TokenKind = "INVALID"
+	TK_INVALID _TokenKind = iota
 
-	TK_IDENTIFIER _TokenKind = "IDENTIFIER"
+	TK_IDENTIFIER
 
-	TK_ASTERIK _TokenKind = "*"
+	TK_ASTERIK
 
-	TK_SEMICOLON _TokenKind = ";"
+	TK_SEMICOLON
 
-	TK_LPAREN _TokenKind = "("
-	TK_RPAREN _TokenKind = ")"
+	TK_LPAREN
+	TK_RPAREN
 
-	TK_DOU_INV _TokenKind = "\""
-	TK_SIN_INV _TokenKind = "'"
-	TK_BK_TICK _TokenKind = "`"
+	TK_DOU_INV
+	TK_SIN_INV
+	TK_BK_TICK
 
-	TK_COMMA _TokenKind = ","
+	TK_COMMA
 
-	TK_EQUALS _TokenKind = "="
+	TK_EQUALS
 
-	TK_DOT _TokenKind = "."
+	TK_DOT
 
-	TK_VAL_NUMBER _TokenKind = "NUMERIC VALUE"
-	TK_VAL_TEXT   _TokenKind = "STRING VALUE"
-	TK_VAL_FLOAT  _TokenKind = "FLOAT VALUE"
-	TK_VAL_BOOL   _TokenKind = "BOOLEAN VALUE"
+	TK_VAL_NUMBERNUMERIC
+	TK_VAL_TEXT
+	TK_VAL_FLOAT
+	TK_VAL_BOOL
 
 	// Data Types
-	TK_DT_NUMBER _TokenKind = "NUMBER"
-	TK_DT_TEXT   _TokenKind = "TEXT"
-	TK_DT_FLOAT  _TokenKind = "FLOAT"
-	TK_DT_BOOL   _TokenKind = "BOOL"
+	TK_DT_NUMBER
+	TK_DT_TEXT
+	TK_DT_FLOAT
+	TK_DT_BOOL
 
 	// Constraints
-	TK_PRIMARY _TokenKind = "PRIMARY"
-	TK_KEY     _TokenKind = "KEY"
-	TK_NOT     _TokenKind = "NOT"
-	TK_NULL    _TokenKind = "NULL"
+	TK_PRIMARY
+	TK_KEY
+	TK_NOT
+	TK_NULL
 
 	// SQL Keywords
-	TK_KW_CREATE _TokenKind = "CREATE"
-	TK_KW_TABLE  _TokenKind = "TABLE"
-	TK_KW_SELECT _TokenKind = "SELECT"
-	TK_KW_FROM   _TokenKind = "FROM"
-	TK_KW_WHERE  _TokenKind = "WHERE"
+	TK_KW_CREATE
+	TK_KW_TABLE
+	TK_KW_SELECT
+	TK_KW_FROM
+	TK_KW_WHERE
 )
 
 type _Token struct {
