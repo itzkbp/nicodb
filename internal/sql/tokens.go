@@ -44,6 +44,9 @@ const (
 	TK_KW_SELECT
 	TK_KW_FROM
 	TK_KW_WHERE
+	TK_KW_INSERT
+	TK_KW_INTO
+	TK_KW_VALUES
 )
 
 type _Token struct {

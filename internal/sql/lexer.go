@@ -100,6 +100,12 @@ func (l *_Lexer) nextToken() _Token {
 				tok = newToken(TK_KW_FROM, ident)
 			case "WHERE":
 				tok = newToken(TK_KW_WHERE, ident)
+			case "INSERT":
+				tok = newToken(TK_KW_INSERT, ident)
+			case "INTO":
+				tok = newToken(TK_KW_INTO, ident)
+			case "VALUES":
+				tok = newToken(TK_KW_VALUES, ident)
 
 			case "NUMBER":
 				tok = newToken(TK_DT_NUMBER, ident)
