@@ -58,10 +58,10 @@ func (l *_Lexer) readLiteral() string {
 	return l.query[start : l.position-1]
 }
 
-func (l *_Lexer) nextToken() _Token {
+func (l *_Lexer) nextToken() *_Token {
 	l.skipWhitespaces()
 
-	var tok _Token
+	var tok *_Token
 
 	switch l.cur_Char {
 	case '*':
