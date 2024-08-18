@@ -54,6 +54,6 @@ type _Token struct {
 	Value string
 }
 
-func newToken(t _TokenKind, v string) _Token {
-	return _Token{t, v}
+func newToken(t _TokenKind, v string) *_Token {
+	return &_Token{t, v}
 }
