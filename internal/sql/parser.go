@@ -1,7 +1,17 @@
 package sqlparser
 
+import (
+	"log"
+	"strings"
+)
+
 type _Result struct {
 	output string
+}
+
+type _Parser struct {
+	lexer *_Lexer
+	token *_Token
 }
 
 type SQLQuery interface {
@@ -20,8 +30,11 @@ type CreateTableStmt struct {
 	columns   []ColumnDefinition
 }
 
-func (t *CreateTableStmt) Execute() {
+func (t *CreateTableStmt) Execute() _Result {
 	// Execute Create Table
+	return _Result{
+		output: "nada",
+	}
 }
 
 type InsertStmt struct {
@@ -56,4 +69,79 @@ type SelectStmt struct {
 	tableName string
 	columns   []string
 	condition Condition
+}
+
+func (t *SelectStmt) Execute() _Result {
+	// Execute Select Statement
+	return _Result{
+		output: "nada",
+	}
+}
+
+func NewParser(l *_Lexer) *_Parser {
+	return &_Parser{
+		lexer: l,
+	}
+}
+
+func (p *_Parser) nextToken() {
+	p.token = p.lexer.nextToken()
+}
+
+func (p *_Parser) expect(tkKind _TokenKind, tkValue string) {
+	if p.token.Type == tkKind && strings.ToUpper(p.token.Value) == tkValue {
+		return
+	}
+	if p.token.Type == TK_IDENTIFIER && p.token.Type == tkKind {
+		return
+	}
+
+	log.Fatalf("(Parser): Expected %s got %s\n", tkValue, p.token.Value)
+}
+
+func (p *_Parser) parseColumnDefinitions() []ColumnDefinition {
+	var columns []ColumnDefinition
+	var column ColumnDefinition
+	hasPK := false
+
+	// continue from ( to ) & parse each column spearated by ,
+
+	if !hasPK {
+		log.Fatal("A Table must have a PRIMARY KEY.")
+	}
+	return columns
+}
+
+func parseCreateTable(p *_Parser) SQLQuery {
+	var stmt CreateTableStmt
+
+	p.nextToken()
+	p.expect(TK_IDENTIFIER, "Table Name")
+	stmt.tableName = p.token.Value
+	p.nextToken()
+	stmt.columns = p.parseColumnDefinitions()
+	p.nextToken()
+	p.expect(TK_SEMICOLON, ";")
+
+	return &stmt
+}
+
+func (p *_Parser) Parse() SQLQuery {
+	p.nextToken()
+
+	var query SQLQuery
+
+	switch p.token.Type {
+	case TK_KW_CREATE:
+		p.expect(TK_KW_CREATE, "CREATE")
+		p.nextToken()
+
+		if p.token.Type == TK_KW_TABLE {
+			p.expect(TK_KW_TABLE, "TABLE")
+
+			query = parseCreateTable(p)
+		}
+	}
+
+	return query
 }
