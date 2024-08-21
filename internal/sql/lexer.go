@@ -1,6 +1,7 @@
 package sqlparser
 
 import (
+	"fmt"
 	"strings"
 	"unicode"
 )
@@ -66,24 +67,34 @@ func (l *_Lexer) nextToken() *_Token {
 	switch l.cur_Char {
 	case '*':
 		tok = newToken(TK_ASTERIK, "*")
+		l.readChar()
 	case '=':
 		tok = newToken(TK_EQUALS, "=")
+		l.readChar()
 	case ';':
 		tok = newToken(TK_SEMICOLON, ";")
+		l.readChar()
 	case '(':
 		tok = newToken(TK_LPAREN, "(")
+		l.readChar()
 	case ')':
 		tok = newToken(TK_RPAREN, ")")
+		l.readChar()
 	case ',':
 		tok = newToken(TK_COMMA, ",")
+		l.readChar()
 	case '.':
 		tok = newToken(TK_DOT, ".")
+		l.readChar()
 	case '\'':
 		tok = newToken(TK_SIN_INV, "'")
+		l.readChar()
 	case '"':
 		tok = newToken(TK_DOU_INV, "\"")
+		l.readChar()
 	case '`':
 		tok = newToken(TK_BK_TICK, "`")
+		l.readChar()
 
 	default:
 		if unicode.IsLetter(l.cur_Char) || l.cur_Char == '_' {
@@ -135,5 +146,6 @@ func (l *_Lexer) nextToken() *_Token {
 		}
 	}
 
+	fmt.Println("Tokenization: ", tok.Type, tok.Value)
 	return tok
 }
