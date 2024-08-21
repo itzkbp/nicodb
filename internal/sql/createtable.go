@@ -60,7 +60,7 @@ func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
 		}
 
 		p.nextToken()
-		if !(p.token.Type == TK_COMMA || p.token.Type == TK_RPAREN) {
+		for !(p.token.Type == TK_COMMA || p.token.Type == TK_RPAREN) { // possibility of multiple constraints
 			// parsing additional constraints
 			switch p.token.Type {
 			case TK_NOT:
