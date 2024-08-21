@@ -21,7 +21,7 @@ func (t *_CreateTableStmt) Execute() *_Result {
 	fmt.Println(t)
 	// Execute Create Table
 	return &_Result{
-		output: "nada",
+		Output: "nada",
 	}
 }
 

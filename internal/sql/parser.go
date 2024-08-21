@@ -6,7 +6,7 @@ import (
 )
 
 type _Result struct {
-	output string
+	Output string
 }
 
 type _Parser struct {
@@ -18,10 +18,10 @@ type _SQLQuery interface {
 	Execute() *_Result
 }
 
-type Operator uint8
+type _Operator uint8
 
 const (
-	OP_EQUALS Operator = iota
+	OP_EQUALS _Operator = iota
 	OP_NOT_EQUALS
 	OP_GT
 	OP_LT
@@ -29,23 +29,23 @@ const (
 	OP_LT_EQUALS
 )
 
-type Condition struct {
+type _Condition struct {
 	option1    string
-	operator   Operator
+	operator   _Operator
 	option2    string
 	isOp2Field bool
 }
 
-type SelectStmt struct {
+type _SelectStmt struct {
 	tableName string
 	columns   []string
-	condition Condition
+	condition _Condition
 }
 
-func (t *SelectStmt) Execute() _Result {
+func (t *_SelectStmt) Execute() _Result {
 	// Execute Select Statement
 	return _Result{
-		output: "nada",
+		Output: "nada",
 	}
 }
 
