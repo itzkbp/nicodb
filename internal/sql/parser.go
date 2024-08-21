@@ -71,14 +71,14 @@ func (p *_Parser) expect(tkKind _TokenKind, tkValue string) {
 }
 
 func (p *_Parser) Parse() _SQLQuery {
-	p.nextToken()
+	p.nextToken() // query start
 
 	var query _SQLQuery
 
 	switch p.token.Type {
 	case TK_KW_CREATE:
 		p.expect(TK_KW_CREATE, "CREATE")
-		p.nextToken()
+		p.nextToken() // table
 
 		if p.token.Type == TK_KW_TABLE {
 			p.expect(TK_KW_TABLE, "TABLE")
@@ -88,7 +88,7 @@ func (p *_Parser) Parse() _SQLQuery {
 
 	case TK_KW_INSERT:
 		p.expect(TK_KW_INSERT, "INSERT")
-		p.nextToken()
+		p.nextToken() // into
 
 		if p.token.Type == TK_KW_INTO {
 			p.expect(TK_KW_INTO, "INTO")
