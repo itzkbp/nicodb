@@ -31,12 +31,14 @@ const (
 	TK_DT_TEXT
 	TK_DT_FLOAT
 	TK_DT_BOOL
+	TK_DT_ANY
 
 	// Constraints
 	TK_PRIMARY
 	TK_KEY
 	TK_NOT
 	TK_NULL
+	TK_CONSTRAINT_ANY
 
 	// SQL Keywords
 	TK_KW_CREATE
