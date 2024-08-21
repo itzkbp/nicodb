@@ -15,7 +15,7 @@ type _Parser struct {
 }
 
 type _SQLQuery interface {
-	Execute() _Result
+	Execute() *_Result
 }
 
 type Operator uint8

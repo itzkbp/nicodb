@@ -17,10 +17,10 @@ type _CreateTableStmt struct {
 	columns   []_ColumnDefinition
 }
 
-func (t *_CreateTableStmt) Execute() _Result {
+func (t *_CreateTableStmt) Execute() *_Result {
 	fmt.Println(t)
 	// Execute Create Table
-	return _Result{
+	return &_Result{
 		output: "nada",
 	}
 }
