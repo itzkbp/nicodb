@@ -14,18 +14,8 @@ type _Parser struct {
 	token *_Token
 }
 
-type SQLQuery interface {
+type _SQLQuery interface {
 	Execute() _Result
-}
-
-type InsertStmt struct {
-	tableName string
-	columns   []string
-	data      []string
-}
-
-func (t *InsertStmt) Execute() {
-	// Execute Insert Statement
 }
 
 type Operator uint8
@@ -80,10 +70,10 @@ func (p *_Parser) expect(tkKind _TokenKind, tkValue string) {
 	log.Fatalf("(Parser): Expected %s got %s\n", tkValue, p.token.Value)
 }
 
-func (p *_Parser) Parse() SQLQuery {
+func (p *_Parser) Parse() _SQLQuery {
 	p.nextToken()
 
-	var query SQLQuery
+	var query _SQLQuery
 
 	switch p.token.Type {
 	case TK_KW_CREATE:
@@ -94,6 +84,16 @@ func (p *_Parser) Parse() SQLQuery {
 			p.expect(TK_KW_TABLE, "TABLE")
 
 			query = parseCreateTable(p)
+		}
+
+	case TK_KW_INSERT:
+		p.expect(TK_KW_INSERT, "INSERT")
+		p.nextToken()
+
+		if p.token.Type == TK_KW_INTO {
+			p.expect(TK_KW_INTO, "INTO")
+
+			query = parseInsertInto(p)
 		}
 	}
 
