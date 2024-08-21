@@ -5,19 +5,19 @@ import (
 	"log"
 )
 
-type ColumnDefinition struct {
+type _ColumnDefinition struct {
 	columnName   string
 	dataType     _TokenKind
 	isPrimaryKey bool
 	isNullable   bool
 }
 
-type CreateTableStmt struct {
+type _CreateTableStmt struct {
 	tableName string
-	columns   []ColumnDefinition
+	columns   []_ColumnDefinition
 }
 
-func (t *CreateTableStmt) Execute() _Result {
+func (t *_CreateTableStmt) Execute() _Result {
 	fmt.Println(t)
 	// Execute Create Table
 	return _Result{
@@ -25,9 +25,9 @@ func (t *CreateTableStmt) Execute() _Result {
 	}
 }
 
-func (p *_Parser) parseColumnDefinitions() []ColumnDefinition {
-	var columns []ColumnDefinition
-	var column ColumnDefinition
+func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
+	var columns []_ColumnDefinition
+	var column _ColumnDefinition
 	hasPK := false
 
 	// continue from ( to ) & parse each column spearated by ,
@@ -106,8 +106,8 @@ func (p *_Parser) parseColumnDefinitions() []ColumnDefinition {
 	return columns
 }
 
-func parseCreateTable(p *_Parser) SQLQuery {
-	var stmt CreateTableStmt
+func parseCreateTable(p *_Parser) _SQLQuery {
+	var stmt _CreateTableStmt
 
 	p.nextToken()
 	p.expect(TK_IDENTIFIER, "Table Name")
