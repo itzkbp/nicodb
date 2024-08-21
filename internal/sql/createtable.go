@@ -32,7 +32,7 @@ func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
 
 	// continue from ( to ) & parse each column spearated by ,
 	p.expect(TK_LPAREN, "(")
-	p.nextToken()
+	p.nextToken() // column definitions ( columnname datatype constraints, ...)
 
 	for p.token.Type != TK_RPAREN {
 
@@ -41,7 +41,7 @@ func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
 		column.isNullable = true
 		column.isPrimaryKey = false
 
-		p.nextToken()
+		p.nextToken() // data type
 		switch p.token.Type {
 		case TK_DT_NUMBER:
 			p.expect(TK_DT_NUMBER, "NUMBER")
@@ -65,16 +65,16 @@ func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
 			switch p.token.Type {
 			case TK_NOT:
 				p.expect(TK_NOT, "NOT")
-				p.nextToken()
+				p.nextToken() // null
 
 				if p.token.Type == TK_NULL {
 					p.expect(TK_NULL, "NULL")
 					column.isNullable = false
-					p.nextToken()
+					p.nextToken() // comma or rparen
 				}
 			case TK_PRIMARY:
 				p.expect(TK_PRIMARY, "PRIMARY")
-				p.nextToken()
+				p.nextToken() // key
 
 				if p.token.Type == TK_KEY {
 					p.expect(TK_KEY, "KEY")
@@ -85,7 +85,7 @@ func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
 					}
 
 					hasPK = true
-					p.nextToken()
+					p.nextToken() // comma or rparen
 				}
 			default:
 				p.expect(TK_CONSTRAINT_ANY, "Constraint: {PRIMARY KEY | NUT NULL}")
@@ -94,7 +94,7 @@ func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
 
 		if p.token.Type == TK_COMMA {
 			p.expect(TK_COMMA, ",")
-			p.nextToken()
+			p.nextToken() // next column
 		}
 
 		columns = append(columns, column)
@@ -109,12 +109,12 @@ func (p *_Parser) parseColumnDefinitions() []_ColumnDefinition {
 func parseCreateTable(p *_Parser) _SQLQuery {
 	var stmt _CreateTableStmt
 
-	p.nextToken()
+	p.nextToken() // Table Name
 	p.expect(TK_IDENTIFIER, "Table Name")
 	stmt.tableName = p.token.Value
-	p.nextToken()
+	p.nextToken() // Column Definitions
 	stmt.columns = p.parseColumnDefinitions()
-	p.nextToken()
+	p.nextToken() // Semicolon
 	p.expect(TK_SEMICOLON, ";")
 
 	return &stmt
