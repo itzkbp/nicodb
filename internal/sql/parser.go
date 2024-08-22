@@ -18,37 +18,6 @@ type _SQLQuery interface {
 	Execute() *_Result
 }
 
-type _Operator uint8
-
-const (
-	OP_EQUALS _Operator = iota
-	OP_NOT_EQUALS
-	OP_GT
-	OP_LT
-	OP_GT_EQUALS
-	OP_LT_EQUALS
-)
-
-type _Condition struct {
-	option1    string
-	operator   _Operator
-	option2    string
-	isOp2Field bool
-}
-
-type _SelectStmt struct {
-	tableName string
-	columns   []string
-	condition _Condition
-}
-
-func (t *_SelectStmt) Execute() _Result {
-	// Execute Select Statement
-	return _Result{
-		Output: "nada",
-	}
-}
-
 func NewParser(l *_Lexer) *_Parser {
 	return &_Parser{
 		lexer: l,
@@ -71,6 +40,34 @@ func (p *_Parser) expect(tkKind _TokenKind, tkValue string) {
 	}
 
 	log.Fatalf("(Parser): Expected %s got %s\n", tkValue, p.token.Value)
+}
+
+func (p *_Parser) parseColumnNames() []string {
+	var columns []string
+	var column string
+
+	if p.token.Type == TK_LPAREN {
+		p.expect(TK_LPAREN, "(")
+		p.nextToken() // column name
+
+		for p.token.Type != TK_RPAREN {
+			p.expect(TK_IDENTIFIER, "Column Name")
+			column = p.token.Value
+			columns = append(columns, column)
+			p.nextToken() // comma or rparen
+
+			if p.token.Type == TK_COMMA {
+				p.expect(TK_COMMA, ",")
+				p.nextToken() // next column
+			}
+		}
+
+		p.expect(TK_RPAREN, ")")
+		p.nextToken()
+	} else {
+		// fill columns array with the columns from table definition
+	}
+	return columns
 }
 
 func (p *_Parser) Parse() _SQLQuery {
@@ -98,6 +95,10 @@ func (p *_Parser) Parse() _SQLQuery {
 
 			query = parseInsertInto(p)
 		}
+
+	case TK_KW_SELECT:
+		p.expect(TK_KW_SELECT, "SELECT")
+		query = parseSelect(p)
 	}
 
 	return query
