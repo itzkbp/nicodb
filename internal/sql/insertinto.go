@@ -3,9 +3,10 @@ package sqlparser
 import "fmt"
 
 type _InsertStmt struct {
+	rows      uint
 	tableName string
 	columns   []string
-	data      []string
+	data      [][]string
 }
 
 func (t *_InsertStmt) Execute() *_Result {
@@ -69,6 +70,8 @@ func (p *_Parser) parseColumnDatas() []string {
 
 func parseInsertInto(p *_Parser) _SQLQuery {
 	var stmt _InsertStmt
+	var dataRow []string
+	rows := uint(1)
 
 	p.nextToken() // Table Name
 	p.expect(TK_IDENTIFIER, "Table Name")
@@ -77,7 +80,17 @@ func parseInsertInto(p *_Parser) _SQLQuery {
 	stmt.columns = p.parseColumnNames()
 	p.expect(TK_KW_VALUES, "VALUES")
 	p.nextToken() // lparen
-	stmt.data = p.parseColumnDatas()
+	for p.token.Type != TK_SEMICOLON {
+		dataRow = p.parseColumnDatas()
+		stmt.data = append(stmt.data, dataRow)
+
+		if p.token.Type == TK_COMMA {
+			p.expect(TK_COMMA, ",")
+			p.nextToken()
+			rows++
+		}
+	}
+	stmt.rows = rows
 	p.expect(TK_SEMICOLON, ";")
 
 	return &stmt
