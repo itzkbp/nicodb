@@ -16,6 +16,9 @@ const (
 
 	TK_COMMA
 
+	TK_GT
+	TK_LT
+	TK_EXCLAMATION
 	TK_EQUALS
 
 	TK_DOT

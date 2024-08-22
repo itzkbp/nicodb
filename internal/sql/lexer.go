@@ -87,6 +87,15 @@ func (l *_Lexer) nextToken() *_Token {
 	case '.':
 		tok = newToken(TK_DOT, ".")
 		l.readChar()
+	case '!':
+		tok = newToken(TK_EXCLAMATION, "!")
+		l.readChar()
+	case '<':
+		tok = newToken(TK_LT, "<")
+		l.readChar()
+	case '>':
+		tok = newToken(TK_GT, ">")
+		l.readChar()
 
 	default:
 		if unicode.IsLetter(l.cur_Char) || l.cur_Char == '_' {
