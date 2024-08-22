@@ -66,6 +66,9 @@ func (p *_Parser) expect(tkKind _TokenKind, tkValue string) {
 	if p.token.Type == TK_IDENTIFIER && p.token.Type == tkKind {
 		return
 	}
+	if p.token.Type == TK_VAL_LITERAL && p.token.Type == tkKind {
+		return
+	}
 
 	log.Fatalf("(Parser): Expected %s got %s\n", tkValue, p.token.Value)
 }
