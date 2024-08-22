@@ -43,16 +43,18 @@ func (l *_Lexer) readIdentifier() string {
 
 func (l *_Lexer) readLiteral() string {
 	start := l.position - 1
+
 	if l.cur_Char == '\'' || l.cur_Char == '"' || l.cur_Char == '`' {
 		l.readChar()
 		for !(l.cur_Char == '\'' || l.cur_Char == '"' || l.cur_Char == '`') {
 			l.readChar()
 		}
 		l.readChar()
-	} else {
-		for unicode.IsDigit(l.cur_Char) || l.cur_Char == '.' {
-			l.readChar()
-		}
+		return l.query[start+1 : l.position-2] // skipping ' " or `
+	}
+
+	for unicode.IsDigit(l.cur_Char) || l.cur_Char == '.' {
+		l.readChar()
 	}
 
 	return l.query[start : l.position-1]
