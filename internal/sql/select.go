@@ -81,7 +81,7 @@ func (p *_Parser) parseOperator() _Operator {
 			operator = OP_LT
 		}
 	case TK_GT:
-		p.expect(TK_LT, "<")
+		p.expect(TK_GT, ">")
 		p.nextToken()
 		if p.token.Type == TK_EQUALS {
 			p.expect(TK_EQUALS, "=")
