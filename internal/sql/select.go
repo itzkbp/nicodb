@@ -112,8 +112,8 @@ func (p *_Parser) parseCondition() *_Condition {
 func parseSelect(p *_Parser) _SQLQuery {
 	var stmt _SelectStmt
 
-	stmt.columns = p.parseColumnNames()
 	p.nextToken()
+	stmt.columns = p.parseColumnNames()
 	if p.token.Type == TK_ASTERIK {
 		p.expect(TK_ASTERIK, "*")
 		p.nextToken() // from
