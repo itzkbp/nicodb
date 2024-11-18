@@ -17,29 +17,6 @@ func (t *_InsertStmt) Execute() *_Result {
 	}
 }
 
-func (p *_Parser) parseColumnDatas() []string {
-	var datas []string
-	var data string
-
-	p.expect(TK_LPAREN, "(")
-	p.nextToken() // datas (data, ...)
-	for p.token.Type != TK_RPAREN {
-		p.expect(TK_VAL_LITERAL, "Literal Value")
-		data = p.token.Value
-		datas = append(datas, data)
-		p.nextToken()
-
-		if p.token.Type == TK_COMMA {
-			p.expect(TK_COMMA, ",")
-			p.nextToken() // next column
-		}
-	}
-
-	p.expect(TK_RPAREN, ")")
-	p.nextToken()
-	return datas
-}
-
 func parseInsertInto(p *_Parser) _SQLQuery {
 	var stmt _InsertStmt
 	var dataRow []string
