@@ -40,6 +40,7 @@ func (p *_Parser) parseUpdateKV() _DataKV {
 
 func parseUpdate(p *_Parser) _SQLQuery {
 	var stmt _UpdateStmt
+
 	p.nextToken()
 	stmt.tableName = p.token.Value
 	p.nextToken()
@@ -48,5 +49,6 @@ func parseUpdate(p *_Parser) _SQLQuery {
 	p.expect(TK_KW_WHERE, "WHERE")
 	p.nextToken()
 	stmt.condition = p.parseCondition()
+
 	return &stmt
 }

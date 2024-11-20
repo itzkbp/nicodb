@@ -50,6 +50,7 @@ const (
 	TK_KW_VALUES
 	TK_KW_UPDATE
 	TK_KW_SET
+	TK_KW_DELETE
 )
 
 type _Token struct {

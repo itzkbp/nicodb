@@ -75,6 +75,16 @@ func (p *_Parser) Parse() _SQLQuery {
 	case TK_KW_UPDATE:
 		p.expect(TK_KW_UPDATE, "UPDATE")
 		query = parseUpdate(p)
+
+	case TK_KW_DELETE:
+		p.expect(TK_KW_DELETE, "DELETE")
+		p.nextToken() // from
+
+		if p.token.Type == TK_KW_FROM {
+			p.expect(TK_KW_FROM, "FROM")
+
+			query = parseDeleteFrom(p)
+		}
 	}
 
 	return query

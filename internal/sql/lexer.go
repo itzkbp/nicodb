@@ -122,6 +122,8 @@ func (l *_Lexer) nextToken() *_Token {
 				tok = newToken(TK_KW_UPDATE, ident)
 			case "SET":
 				tok = newToken(TK_KW_SET, ident)
+			case "DELETE":
+				tok = newToken(TK_KW_DELETE, ident)
 
 			case "NUMBER":
 				tok = newToken(TK_DT_NUMBER, ident)
