@@ -71,6 +71,10 @@ func (p *_Parser) Parse() _SQLQuery {
 	case TK_KW_SELECT:
 		p.expect(TK_KW_SELECT, "SELECT")
 		query = parseSelect(p)
+
+	case TK_KW_UPDATE:
+		p.expect(TK_KW_UPDATE, "UPDATE")
+		query = parseUpdate(p)
 	}
 
 	return query

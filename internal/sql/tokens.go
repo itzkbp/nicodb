@@ -48,6 +48,8 @@ const (
 	TK_KW_INSERT
 	TK_KW_INTO
 	TK_KW_VALUES
+	TK_KW_UPDATE
+	TK_KW_SET
 )
 
 type _Token struct {

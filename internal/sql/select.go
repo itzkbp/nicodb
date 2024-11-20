@@ -2,28 +2,6 @@ package sqlparser
 
 import "fmt"
 
-type _Operator uint8
-
-const (
-	OP_EQUALS _Operator = iota
-	OP_NOT_EQUALS
-	OP_GT
-	OP_LT
-	OP_GT_EQUALS
-	OP_LT_EQUALS
-)
-
-type _Field struct {
-	name      string
-	isLiteral bool
-}
-
-type _Condition struct {
-	left     *_Field
-	operator _Operator
-	right    *_Field
-}
-
 type _SelectStmt struct {
 	tableName string
 	columns   []string
@@ -52,61 +30,6 @@ func (p *_Parser) parseField() *_Field {
 	}
 
 	return &field
-}
-
-func (p *_Parser) parseOperator() _Operator {
-	var operator _Operator
-
-	switch p.token.Type {
-	case TK_EQUALS:
-		p.expect(TK_EQUALS, "=")
-		operator = OP_EQUALS
-		p.nextToken()
-	case TK_EXCLAMATION:
-		p.expect(TK_EXCLAMATION, "!")
-		p.nextToken()
-		if p.token.Type == TK_EQUALS {
-			p.expect(TK_EQUALS, "=")
-			operator = OP_NOT_EQUALS
-			p.nextToken()
-		}
-	case TK_LT:
-		p.expect(TK_LT, "<")
-		p.nextToken()
-		if p.token.Type == TK_EQUALS {
-			p.expect(TK_EQUALS, "=")
-			operator = OP_LT_EQUALS
-			p.nextToken()
-		} else {
-			operator = OP_LT
-		}
-	case TK_GT:
-		p.expect(TK_GT, ">")
-		p.nextToken()
-		if p.token.Type == TK_EQUALS {
-			p.expect(TK_EQUALS, "=")
-			operator = OP_GT_EQUALS
-			p.nextToken()
-		} else {
-			operator = OP_GT
-		}
-
-	}
-	return operator
-}
-
-func (p *_Parser) parseCondition() *_Condition {
-	var condition _Condition
-
-	condition.left = p.parseField()
-	p.nextToken() // operator
-	condition.operator = p.parseOperator()
-	condition.right = p.parseField()
-
-	p.nextToken()
-	p.expect(TK_SEMICOLON, ";")
-
-	return &condition
 }
 
 func parseSelect(p *_Parser) _SQLQuery {
